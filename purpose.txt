@@ -1,0 +1,11 @@
+map general data from different sources to common data storage (mongo).
+Data should be represents in the form convenient for text-analyzing applications.
+
+List of collections:
+
+countries:
+_id iso_code, name iso_name, alias [], context []
+ sources:
+ iso_code and iso_name from http://www.iso.org/iso/country_names_and_code_elements_txt
+ alias from freebase
+ context - takes fourths first letters compare with the name and alias, then check in freebase, if  reconcile returns country then add word to context.
