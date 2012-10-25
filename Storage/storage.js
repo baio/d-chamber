@@ -7,7 +7,7 @@
   exports.get = function(type) {
     switch (type) {
       case "mongo":
-        return mongoStorage.Storage;
+        return new mongoStorage.Storage();
     }
   };
 

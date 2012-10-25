@@ -33,7 +33,7 @@
         }, function(source, ck) {
           return _this._compile(iso_parse, source, ck);
         }, function(countries, ck) {
-          return _this._write(countries, ck);
+          return _this._write(store, countries, ck);
         }
       ], onDone);
     };
@@ -57,14 +57,14 @@
           for (_j = 0, _len1 = countries.length; _j < _len1; _j++) {
             c = countries[_j];
             fc = freebaseCountries.filter(function(f) {
-              return f.name === c.name;
+              return f.name.toLowerCase() === c.name;
             })[0];
             if (fc) {
               c.alias = fc.alias;
             }
           }
-          return onDone(err, countries);
         }
+        return onDone(err, countries);
       });
     };
 

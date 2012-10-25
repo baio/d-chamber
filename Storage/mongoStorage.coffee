@@ -1,6 +1,7 @@
 #{uri : uri, collection : string}
 async = require "async"
 mongo = require "mongodb"
+connection = require "./mongoConnection"
 
 class MongoStorage
 
@@ -8,25 +9,25 @@ class MongoStorage
 
     if @_collection then throw "collection is already opened"
 
-    config =  conn.str2config @config
+    config =  connection.str2config store.uri
 
     async.waterfall [
 
       (ck) ->
 
-        db = new mongo.DB config.database, new mongo.Server(config.host, config.port, {})
+        db = new mongo.Db config.database, new mongo.Server(config.host, config.port), { safe : true }
 
         db.open ck
 
       (db, ck) =>
 
-      if config.user
+        if config.user
 
-          db.authenticate config.user, config.pass, ck
+            db.authenticate config.user, config.pass, (err) -> ck err, db
 
-        else
+          else
 
-          ck null, db
+            ck null, db
 
     ,(db, ck) =>
 

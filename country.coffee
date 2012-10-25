@@ -27,7 +27,7 @@ class Country
 
       #write to store
       (countries, ck) =>
-        @_write countries, ck
+        @_write store, countries, ck
 
       ], onDone
 
@@ -48,13 +48,13 @@ class Country
 
         for c in countries
 
-          fc = freebaseCountries.filter((f) -> f.name == c.name)[0]
+          fc = freebaseCountries.filter((f) -> f.name.toLowerCase() == c.name)[0]
 
           if fc
 
             c.alias = fc.alias
 
-        onDone err, countries
+      onDone err, countries
 
   #insert items to storage
   _write: (store, countries, onDone) ->
@@ -72,7 +72,9 @@ class Country
         async.forEach countries, ((c, cb) -> stg.insert c, cb),  ck
 
       ], (err) ->
+
         stg.close()
+
         onDone err
 
 exports.Country = Country

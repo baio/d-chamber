@@ -5,5 +5,5 @@ exports.get = (type) ->
 
   switch type
 
-    when "mongo" then mongoStorage.Storage
+    when "mongo" then new mongoStorage.Storage()
 
