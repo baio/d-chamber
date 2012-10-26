@@ -8,7 +8,7 @@ class Country
 
   ###
   iso - iso data request structure {req : request}
-  iso_parse - iso parse structure {parser : sourceParser, fields : {code : int, name : int}}
+  iso_parse - iso parse structure {parser : sourceParser, fields : {code : int, name : int}, postProcess : [item]function(item)}
   fields.code, fields.name - indexes of respective columns
   store - storage  access structure {uri : uri, collection : string, type : "mongo"}
   storage result structure : {_id : iso.code, name : iso.name, fullName, alias : [freebase.alias]}
@@ -40,7 +40,11 @@ class Country
     #initalize result columns from source
     for r in columns
 
-      countries.push _id : r[iso_parse.fields.code], name : r[iso_parse.fields.name]
+      item = _id : r[iso_parse.fields.code], name : r[iso_parse.fields.name]
+
+      item = iso_parse.postProccess item if iso_parse.postProccess
+
+      countries.push item
 
     freebase.getCountries (countries.map (m) -> m.name), (err, freebaseCountries) ->
 
@@ -50,11 +54,17 @@ class Country
 
           fc = freebaseCountries.filter((f) -> f.name.toLowerCase() == c.name)[0]
 
+          c.alias = [] if !c.alias
+
           if fc
 
-            c.alias = fc.alias
+            c.alias = c.alias.concat fc.alias
 
-      onDone err, countries
+          c.name = c.name.toLowerCase()
+
+          c.alias = c.alias.map (m) -> m.toLowerCase()
+
+        onDone err, countries
 
   #insert items to storage
   _write: (store, countries, onDone) ->

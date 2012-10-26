@@ -12,11 +12,7 @@ exports.getCountries = (countries, onDone) ->
 
   async.forEach countries, (country, ck) ->
 
-    console.log country
-
-    requestDelay = 1000 / config.freebase.requestsPerSecond
-
-    request url : 'https://www.googleapis.com/freebase/v1/mqlread?query={"type":"/location/country","name":"' + country + '","/common/topic/alias":[]}&key=AIzaSyBZF_jfqQ0HjXaEWsNCXkpzTSVpxvPKulY', (err, resp, body) ->
+    request url : 'https://www.googleapis.com/freebase/v1/mqlread?query={"type":"/location/country","name":"' + country + '","/common/topic/alias":[]}&key=' + config.freebase.key , (err, resp, body) ->
 
       body = body.replace /\n/, "" if body
 

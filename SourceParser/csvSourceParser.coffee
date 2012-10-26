@@ -9,7 +9,9 @@ exports.parse = (parser, source) ->
 
     line = line.replace(/[\r\n]/g, "").toLocaleLowerCase()
 
-    mx[i] = line.split parser.separator
+    if line
+
+      mx[i] = line.split parser.separator
 
   mx
 

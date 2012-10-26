@@ -12,11 +12,8 @@
     var freebaseCountries;
     freebaseCountries = [];
     return async.forEach(countries, function(country, ck) {
-      var requestDelay;
-      console.log(country);
-      requestDelay = 1000 / config.freebase.requestsPerSecond;
       return request({
-        url: 'https://www.googleapis.com/freebase/v1/mqlread?query={"type":"/location/country","name":"' + country + '","/common/topic/alias":[]}&key=AIzaSyBZF_jfqQ0HjXaEWsNCXkpzTSVpxvPKulY'
+        url: 'https://www.googleapis.com/freebase/v1/mqlread?query={"type":"/location/country","name":"' + country + '","/common/topic/alias":[]}&key=' + config.freebase.key
       }, function(err, resp, body) {
         var json;
         if (body) {

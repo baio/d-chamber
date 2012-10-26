@@ -8,7 +8,9 @@
     for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
       line = _ref[i];
       line = line.replace(/[\r\n]/g, "").toLocaleLowerCase();
-      mx[i] = line.split(parser.separator);
+      if (line) {
+        mx[i] = line.split(parser.separator);
+      }
     }
     return mx;
   };

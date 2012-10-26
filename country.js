@@ -18,7 +18,7 @@
 
     /*
       iso - iso data request structure {req : request}
-      iso_parse - iso parse structure {parser : sourceParser, fields : {code : int, name : int}}
+      iso_parse - iso parse structure {parser : sourceParser, fields : {code : int, name : int}, postProcess : [item]function(item)}
       fields.code, fields.name - indexes of respective columns
       store - storage  access structure {uri : uri, collection : string, type : "mongo"}
       storage result structure : {_id : iso.code, name : iso.name, fullName, alias : [freebase.alias]}
@@ -39,15 +39,19 @@
     };
 
     Country.prototype._compile = function(iso_parse, source, onDone) {
-      var columns, countries, r, _i, _len;
+      var columns, countries, item, r, _i, _len;
       columns = sourceParser.get(iso_parse.parser.type).parse(iso_parse.parser, source);
       countries = [];
       for (_i = 0, _len = columns.length; _i < _len; _i++) {
         r = columns[_i];
-        countries.push({
+        item = {
           _id: r[iso_parse.fields.code],
           name: r[iso_parse.fields.name]
-        });
+        };
+        if (iso_parse.postProccess) {
+          item = iso_parse.postProccess(item);
+        }
+        countries.push(item);
       }
       return freebase.getCountries(countries.map(function(m) {
         return m.name;
@@ -59,12 +63,19 @@
             fc = freebaseCountries.filter(function(f) {
               return f.name.toLowerCase() === c.name;
             })[0];
-            if (fc) {
-              c.alias = fc.alias;
+            if (!c.alias) {
+              c.alias = [];
             }
+            if (fc) {
+              c.alias = c.alias.concat(fc.alias);
+            }
+            c.name = c.name.toLowerCase();
+            c.alias = c.alias.map(function(m) {
+              return m.toLowerCase();
+            });
           }
+          return onDone(err, countries);
         }
-        return onDone(err, countries);
       });
     };
 

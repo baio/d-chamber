@@ -2,4 +2,4 @@ exports.config =
 
   freebase :
 
-    requestsPerSecond : 5
+    key : "AIzaSyBZF_jfqQ0HjXaEWsNCXkpzTSVpxvPKulY"
