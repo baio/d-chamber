@@ -67,7 +67,7 @@ class Country
 
         stg.open store, ck
 
-      (ck) ->
+      (collection, ck) ->
 
         async.forEach countries, ((c, cb) -> stg.insert c, cb),  ck
 

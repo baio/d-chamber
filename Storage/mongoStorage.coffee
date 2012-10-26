@@ -49,7 +49,7 @@ class MongoStorage
 
   close: ->
 
-    if @_collection then throw "collection is already closed"
+    if !@_collection then throw "collection is already closed"
 
     @_collection.db.close()
 

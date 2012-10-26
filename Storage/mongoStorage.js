@@ -53,7 +53,7 @@
     };
 
     MongoStorage.prototype.close = function() {
-      if (this._collection) {
+      if (!this._collection) {
         throw "collection is already closed";
       }
       this._collection.db.close();

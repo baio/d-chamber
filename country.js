@@ -74,7 +74,7 @@
       return async.waterfall([
         function(ck) {
           return stg.open(store, ck);
-        }, function(ck) {
+        }, function(collection, ck) {
           return async.forEach(countries, (function(c, cb) {
             return stg.insert(c, cb);
           }), ck);
